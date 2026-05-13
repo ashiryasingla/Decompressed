@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decompressed — 5 minutes is enough</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SIGNUP
+═══════════════════════════════════════════════════════════════ -->
+<div id="signup" class="screen active">
+  <div class="signup-inner">
+    <div class="signup-logo">De<em>com</em><br>pressed.</div>
+    <span class="signup-tag">your quiet corner of the internet</span>
+    <div class="signup-card">
+      <h2>Create your space</h2>
+      <p>Just your email. We'll give you an anonymous name — no one will know it's you.</p>
+      <div class="input-wrap">
+        <input type="email" id="signupEmail" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="err-msg" id="signupErr">Please enter a valid email address.</div>
+      <button class="signup-btn" onclick="doSignup()">Get my anonymous name →</button>
+      <div class="anon-note">
+        You'll appear everywhere as<br>
+        <span class="anon-name-preview" id="namePreview">Quiet River</span>
+      </div>
+      <div class="already-link">Already have an account? <span onclick="showScreen('login')">Sign in</span></div>
+    </div>
+    <div class="privacy-note">Your email is only used to identify your account to site admins for safety purposes. It is never shown to other users or shared with third parties.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     LOGIN
+═══════════════════════════════════════════════════════════════ -->
+<div id="login" class="screen">
+  <div class="login-inner">
+    <div class="signup-logo" style="text-align:center;margin-bottom:10px">De<em>com</em><br>pressed.</div>
+    <span class="signup-tag" style="display:block;text-align:center">welcome back</span>
+    <div class="signup-card">
+      <h2>Sign back in</h2>
+      <p>Enter your email and we'll find your anonymous identity.</p>
+      <div class="input-wrap">
+        <input type="email" id="loginEmail" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="err-msg" id="loginErr">We couldn't find that email. Try signing up instead.</div>
+      <button class="signup-btn" onclick="doLogin()">Continue →</button>
+      <div class="already-link">New here? <span onclick="showScreen('signup')">Sign up</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     LANDING
+═══════════════════════════════════════════════════════════════ -->
+<div id="landing" class="screen">
+  <div class="landing-inner">
+    <div class="user-chip">
+      <span>👤</span> You are <strong id="chipName">Quiet River</strong>
+      <span class="logout-x" onclick="logout()" title="sign out">✕</span>
+    </div>
+    <div class="tag">no judgment · 5 min max · always anonymous</div>
+    <h1>De<em>com</em><br>pressed.</h1>
+    <p class="subtitle">You have five minutes. That's enough. Pick how you're feeling right now.</p>
+    <p class="mood-label">i'm feeling —</p>
+    <div class="moods">
+      <button class="mood-btn" data-mood="anxious" onclick="pickMood('anxious')">
+        <span class="mood-emoji">😤</span>
+        <span class="mood-name">Anxious</span>
+        <span class="mood-desc">Heart racing. Thoughts spiraling. Can't sit still.</span>
+      </button>
+      <button class="mood-btn" data-mood="burnt" onclick="pickMood('burnt')">
+        <span class="mood-emoji">🔥</span>
+        <span class="mood-name">Burnt Out</span>
+        <span class="mood-desc">Running on empty. Everything feels like too much.</span>
+      </button>
+      <button class="mood-btn" data-mood="overwhelmed" onclick="pickMood('overwhelmed')">
+        <span class="mood-emoji">🌊</span>
+        <span class="mood-name">Overwhelmed</span>
+        <span class="mood-desc">Too much to do. No idea where to start.</span>
+      </button>
+      <button class="mood-btn" data-mood="numb" onclick="pickMood('numb')">
+        <span class="mood-emoji">🫥</span>
+        <span class="mood-name">Numb / Zoned Out</span>
+        <span class="mood-desc">Detached. Going through the motions. Meh.</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     TOOLS
+═══════════════════════════════════════════════════════════════ -->
+<div id="tools" class="screen">
+  <div class="tools-inner">
+    <button class="back-btn" onclick="showScreen('landing')">← back</button>
+    <h2 class="tools-heading">Let's help you <span id="moodVerb">breathe</span>.</h2>
+    <p class="tools-sub">Pick an activity — each one is under 5 minutes.</p>
+    <div class="tool-cards" id="toolCards"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BREATHE
+═══════════════════════════════════════════════════════════════ -->
+<div id="breathe" class="screen activity-screen">
+  <div class="activity-inner">
+    <div class="activity-header">
+      <button class="back-btn" style="margin-bottom:0" onclick="showScreen('tools')">←</button>
+      <span class="activity-title">Box Breathing</span>
+      <span class="timer-badge" id="breatheTimer">4:00</span>
+    </div>
+    <div class="breath-container">
+      <div class="breath-circle-wrap">
+        <div class="breath-ring"></div>
+        <div class="breath-circle" id="breathCircle">
+          <div class="breath-text" id="breathPhaseText">ready?</div>
+        </div>
+      </div>
+      <p class="breath-instruction" id="breathInstruction">Inhale · Hold · Exhale · Hold — 4 seconds each</p>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="breathProgress"></div></div>
+      <p class="breath-counter" id="breathCyclesText">— cycles —</p>
+      <button class="start-btn" id="breathStartBtn" onclick="startBreathing()">begin</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     JOURNAL
+═══════════════════════════════════════════════════════════════ -->
+<div id="journal" class="screen activity-screen">
+  <div class="activity-inner">
+    <div class="activity-header">
+      <button class="back-btn" style="margin-bottom:0" onclick="showScreen('tools')">←</button>
+      <span class="activity-title">Quick Vent</span>
+      <span class="timer-badge">session only · not stored</span>
+    </div>
+    <div class="journal-container">
+      <div class="prompt-card">
+        <p class="prompt-label">your prompt</p>
+        <p class="prompt-text" id="journalPrompt">"Right now I feel..."</p>
+      </div>
+      <textarea class="journal-textarea" id="journalText"
+        placeholder="Just type. No one will ever see this. It disappears when you close the tab."></textarea>
+      <div class="journal-footer">
+        <span class="delete-note">🔒 never saved · never seen</span>
+        <div class="btn-row">
+          <button class="done-btn" onclick="newPrompt()">new prompt</button>
+          <button class="start-btn" onclick="finishActivity()">i'm done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SOUND
+═══════════════════════════════════════════════════════════════ -->
+<div id="sound" class="screen activity-screen">
+  <div class="activity-inner">
+    <div class="activity-header">
+      <button class="back-btn" style="margin-bottom:0" onclick="stopSound();showScreen('tools')">←</button>
+      <span class="activity-title">Soundscape</span>
+      <span class="timer-badge">close eyes · breathe</span>
+    </div>
+    <div class="sound-container">
+      <div class="soundscape-grid">
+        <div class="sound-card" onclick="playSound('rain')" id="sc-rain">
+          <div class="sound-playing-dot"></div>
+          <span class="sound-emoji">🌧️</span>
+          <div class="sound-name">Heavy Rain</div>
+          <div class="sound-desc">Steady rain on glass</div>
+        </div>
+        <div class="sound-card" onclick="playSound('forest')" id="sc-forest">
+          <div class="sound-playing-dot"></div>
+          <span class="sound-emoji">🌿</span>
+          <div class="sound-name">Forest</div>
+          <div class="sound-desc">Birds &amp; rustling leaves</div>
+        </div>
+        <div class="sound-card" onclick="playSound('cafe')" id="sc-cafe">
+          <div class="sound-playing-dot"></div>
+          <span class="sound-emoji">☕</span>
+          <div class="sound-name">Café Murmur</div>
+          <div class="sound-desc">Low chatter &amp; clinks</div>
+        </div>
+        <div class="sound-card" onclick="playSound('ocean')" id="sc-ocean">
+          <div class="sound-playing-dot"></div>
+          <span class="sound-emoji">🌊</span>
+          <div class="sound-name">Ocean Waves</div>
+          <div class="sound-desc">Slow rolling tide</div>
+        </div>
+      </div>
+      <div class="volume-row">
+        <span class="vol-label">volume</span>
+        <input type="range" min="0" max="1" step="0.01" value="0.5" id="volSlider" oninput="setVolume(this.value)">
+      </div>
+      <button class="start-btn" onclick="finishActivity()" style="width:100%">i feel better</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     SAND DRAWING
+═══════════════════════════════════════════════════════════════ -->
+<div id="sand" class="screen activity-screen">
+  <div class="activity-inner">
+    <div class="activity-header">
+      <button class="back-btn" style="margin-bottom:0" onclick="stopSand();showScreen('tools')">←</button>
+      <span class="activity-title">Sand Drawing</span>
+      <span class="timer-badge">draw · breathe · let go</span>
+    </div>
+    <div class="sand-container">
+      <canvas id="sandCanvas" width="460" height="320"></canvas>
+      <div class="sand-controls">
+        <div class="sand-color-btn active" style="background:#a78bfa" data-color="#a78bfa" onclick="setSandColor(this)"></div>
+        <div class="sand-color-btn"        style="background:#74c0fc" data-color="#74c0fc" onclick="setSandColor(this)"></div>
+        <div class="sand-color-btn"        style="background:#ff6b6b" data-color="#ff6b6b" onclick="setSandColor(this)"></div>
+        <div class="sand-color-btn"        style="background:#ffa94d" data-color="#ffa94d" onclick="setSandColor(this)"></div>
+        <div class="sand-color-btn"        style="background:#69db7c" data-color="#69db7c" onclick="setSandColor(this)"></div>
+        <div class="sand-color-btn"        style="background:#f0ede8" data-color="#f0ede8" onclick="setSandColor(this)"></div>
+        <button class="clear-btn" onclick="clearSand()">clear</button>
+      </div>
+      <p class="sand-hint">Patterns slowly fade away on their own — nothing lasts, and that's okay.</p>
+      <button class="start-btn" onclick="finishActivity()">i feel better</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     DONE
+═══════════════════════════════════════════════════════════════ -->
+<div id="done" class="screen">
+  <div class="done-inner">
+    <span class="done-emoji">✨</span>
+    <h2 class="done-h">You took a <em>minute</em> for yourself.</h2>
+    <p class="done-sub">That's not small. You showed up. Now go get 'em — or come back whenever you need to.</p>
+    <div class="done-actions">
+      <button class="pill-btn" onclick="showScreen('tools')">try another activity</button>
+      <button class="pill-btn primary" onclick="showScreen('landing')">start over</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     KINDNESS MODAL
+═══════════════════════════════════════════════════════════════ -->
+<div class="kindness-overlay hidden" id="kindnessOverlay">
+  <div class="kindness-card">
+    <span class="kindness-icon">🤝</span>
+    <h3 class="kindness-title">Before you enter</h3>
+    <ul class="kindness-rules">
+      <li>💛 Everyone here is struggling too. Be gentle.</li>
+      <li>🔇 No advice unless asked — sometimes people just need to be heard.</li>
+      <li>🚪 Leave whenever you feel better. No goodbyes needed.</li>
+      <li>🔒 Messages clear every 10 min. Nothing sticks around.</li>
+    </ul>
+    <div class="your-name-row">You'll appear as <strong id="displayNamePreview">Quiet River</strong></div>
+    <button class="start-btn" style="width:100%" onclick="enterChat()">I understand, let me in</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CHAT
+═══════════════════════════════════════════════════════════════ -->
+<div id="chat" class="screen">
+  <div class="chat-layout">
+    <div class="chat-header">
+      <div class="chat-room-badge">
+        <span class="chat-room-emoji" id="chatRoomEmoji">😤</span>
+        <div>
+          <div class="chat-room-name" id="chatRoomName">Anxious Room</div>
+          <div class="chat-room-meta"><span class="online-dot"></span><span id="onlineCount">3 people</span> here right now</div>
+        </div>
+      </div>
+      <button class="leave-btn" onclick="leaveChat()">i feel better ✓</button>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-row">
+      <textarea class="chat-input" id="chatInput" placeholder="say something kind..." rows="1"
+        onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" onclick="sendMessage()">↑</button>
+    </div>
+  </div>
+</div>
+
+<!-- Entry point: type="module" enables ES module imports -->
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
