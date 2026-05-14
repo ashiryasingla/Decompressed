@@ -57,12 +57,11 @@ export function pickMood(mood) {
   currentMood = mood;
   document.body.className = MOODS[mood].color;
   document.getElementById('moodVerb').textContent = MOODS[mood].verb;
-
   document.getElementById('toolCards').innerHTML = MOODS[mood].tools
     .map(k => {
       const t = TOOLS[k];
       return `
-        <div class="tool-card" onclick="TOOLS['${k}'].fn()">
+        <div class="tool-card" onclick="trackTool('${k}', '${mood}'); TOOLS['${k}'].fn()">
           <div class="tool-icon" style="background:${t.bg}">${t.icon}</div>
           <div class="tool-info">
             <div class="tool-name">${t.name}</div>
@@ -72,6 +71,18 @@ export function pickMood(mood) {
         </div>`;
     })
     .join('');
-
   showScreen('tools');
+}
+export async function trackTool(tool, mood) {
+  try {
+    const user = JSON.parse(sessionStorage.getItem('dcUser'));
+    await addDoc(collection(db, "toolUsage"), {
+      email: user ? user.email : "anonymous",
+      tool: tool,
+      mood: mood,
+      timestamp: serverTimestamp()
+    });
+  } catch (e) {
+    console.error("Tracking failed:", e);
+  }
 }
