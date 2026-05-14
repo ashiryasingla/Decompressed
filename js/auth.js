@@ -4,6 +4,7 @@
 
 import { showScreen } from './screens.js';
 import { randName, randNameRandom } from './names.js';
+import { db, addDoc, collection, serverTimestamp } from './firebase.js';
 
 // ── Simulated user database (sessionStorage) ──────────────────────────────
 function getDB() {
