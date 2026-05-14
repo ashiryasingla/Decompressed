@@ -75,8 +75,8 @@ export function doLogin() {
     return;
   }
 
-  const db = getDB();
-  if (!db[email]) {
+  const localDB = getDB();
+  if (!localDB[email]) {
     emailEl.classList.add('error');
     errEl.textContent = "We couldn't find that email. Try signing up instead.";
     errEl.classList.add('show');
@@ -85,7 +85,7 @@ export function doLogin() {
 
   emailEl.classList.remove('error');
   errEl.classList.remove('show');
-  currentUser = db[email];
+  currentUser = localDB[email];
   sessionStorage.setItem('dcUser', JSON.stringify(currentUser));
   enterApp();
 }
