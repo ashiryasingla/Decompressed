@@ -1,7 +1,7 @@
 // ─── main.js ─────────────────────────────────────────────────────────────────
 // App entry point. Imports all modules and wires up the global functions
 // that HTML onclick attributes call directly.
-
+import { pickMood, TOOLS, trackTool } from './mood.js';
 import { initAuth, doSignup, doLogin, logout }  from './auth.js';
 import { showScreen, finishActivity }            from './screens.js';
 import { pickMood, TOOLS }                       from './mood.js';
