@@ -24,7 +24,6 @@ Object.assign(window, trackTool,{
   // navigation
   showScreen, finishActivity,
   // mood & tools
-  pickMood, TOOLS,
   // breathing
   startBreathing,
   // journal
