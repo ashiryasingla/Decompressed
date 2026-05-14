@@ -28,7 +28,7 @@ export function initAuth() {
 }
 
 // ── Signup ───────────────────────────────────────────────────────────────
-export function doSignup() {
+export async function doSignup() {
   const emailEl = document.getElementById('signupEmail');
   const errEl   = document.getElementById('signupErr');
   const email   = emailEl.value.trim().toLowerCase();
@@ -41,18 +41,27 @@ export function doSignup() {
   emailEl.classList.remove('error');
   errEl.classList.remove('show');
 
-  const db = getDB();
-  if (db[email]) {
-    currentUser = db[email]; // existing user — just log in
+  const localDB = getDB();  // renamed from db to localDB
+  if (localDB[email]) {
+    currentUser = localDB[email];
   } else {
     const name = randName(email);
     currentUser = { email, name, joined: Date.now() };
-    db[email] = currentUser;
-    saveDB(db);
+    localDB[email] = currentUser;
+    saveDB(localDB);
+
+    // Save new user to Firebase
+    await addDoc(collection(db, "users"), {
+      email: email,
+      name: name,
+      joined: serverTimestamp()
+    });
   }
+
   sessionStorage.setItem('dcUser', JSON.stringify(currentUser));
   enterApp();
 }
+
 
 // ── Login ────────────────────────────────────────────────────────────────
 export function doLogin() {
@@ -80,6 +89,7 @@ export function doLogin() {
   sessionStorage.setItem('dcUser', JSON.stringify(currentUser));
   enterApp();
 }
+
 
 // ── Logout ───────────────────────────────────────────────────────────────
 export function logout() {
