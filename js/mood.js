@@ -3,6 +3,7 @@
 
 import { showScreen }    from './screens.js';
 import { openChatEntry } from './chat.js';
+import { db, addDoc, collection, serverTimestamp } from './firebase.js';
 
 // ── Mood definitions ──────────────────────────────────────────────────────
 export const MOODS = {
