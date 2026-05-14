@@ -19,7 +19,7 @@ initAuth();
 
 // ── Expose to global scope for inline onclick handlers ────────────────────
 // (Replace with addEventListener calls if you prefer no globals.)
-Object.assign(window, {
+Object.assign(window, trackTool,{
   // auth
   doSignup, doLogin, logout,
   // navigation
