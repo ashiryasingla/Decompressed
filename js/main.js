@@ -4,7 +4,6 @@
 import { pickMood, TOOLS, trackTool } from './mood.js';
 import { initAuth, doSignup, doLogin, logout }  from './auth.js';
 import { showScreen, finishActivity }            from './screens.js';
-import { pickMood, TOOLS }                       from './mood.js';
 import { startBreathing }                        from './breathing.js';
 import { newPrompt }                             from './journal.js';
 import { playSound, stopSound, setVolume }       from './sound.js';
